@@ -55,6 +55,13 @@ func main() {
 		patterns = stringSlice{"**/*"}
 	}
 
+	// Load .gwatchignore from each watch directory
+	if fileIgnores := loadIgnoreFiles(watchDirs); len(fileIgnores) > 0 {
+		ignores = append(ignores, fileIgnores...)
+	}
+	// Always ignore .gwatchignore itself
+	ignores = append(ignores, ".gwatchignore")
+
 	logger := NewLogger()
 	logger.Info("Starting gwatch")
 	logger.Info(fmt.Sprintf("Watching:  %s", strings.Join(watchDirs, ", ")))
